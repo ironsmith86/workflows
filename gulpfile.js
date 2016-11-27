@@ -40,10 +40,10 @@ gulp.task('compass', function(){
         .on('error', gutil.log);
 });
 
-gulp.task('default', ['coffee','jsConcat', 'compass']);
-
 gulp.task('watch', function(){
     gulp.watch(coffeeSources, ['coffee']);
     gulp.watch(jsSources, ['jsConcat']);
     gulp.watch('components/sass/*.scss', ['compass']);
 });
+
+gulp.task('default', ['coffee','jsConcat', 'compass', 'watch']);
