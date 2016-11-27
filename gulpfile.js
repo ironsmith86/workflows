@@ -33,11 +33,17 @@ gulp.task('compass', function(){
     gulp.src(sassSources)
         .pipe(compass({
             sass: 'components/sass',
+            css: 'builds/development/css',
             image: 'builds/development/images',
             style: 'expanded'
         }))
-            .on('error', gutil.log)
-        .pipe(gulp.dest('builds/development/css'));
+        .on('error', gutil.log);
 });
 
 gulp.task('default', ['coffee','jsConcat', 'compass']);
+
+gulp.task('watch', function(){
+    gulp.watch(coffeeSources, ['coffee']);
+    gulp.watch(jsSources, ['jsConcat']);
+    gulp.watch('components/sass/*.scss', ['compass']);
+});
