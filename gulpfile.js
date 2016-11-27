@@ -3,7 +3,8 @@ gutil = require('gulp-util'),
 coffee = require('gulp-coffee'),
 concat = require('gulp-concat'),
 browserify = require('gulp-browserify'),
-compass = require('gulp-compass');
+compass = require('gulp-compass'),
+connect = require('gulp-connect');
 
 var coffeeSources = ['components/coffee/*.coffee'];
 var jsSources = [
@@ -26,7 +27,8 @@ gulp.task('jsConcat', function(){
     gulp.src(jsSources)
         .pipe(concat('script.js'))
         .pipe(browserify())
-        .pipe(gulp.dest('builds/development/js'));
+        .pipe(gulp.dest('builds/development/js'))
+        .pipe(connect.reload());
 });
 
 gulp.task('compass', function(){
@@ -37,7 +39,8 @@ gulp.task('compass', function(){
             image: 'builds/development/images',
             style: 'expanded'
         }))
-        .on('error', gutil.log);
+        .on('error', gutil.log)
+        .pipe(connect.reload());
 });
 
 gulp.task('watch', function(){
@@ -46,4 +49,11 @@ gulp.task('watch', function(){
     gulp.watch('components/sass/*.scss', ['compass']);
 });
 
-gulp.task('default', ['coffee','jsConcat', 'compass', 'watch']);
+gulp.task('connect', function(){
+    connect.server({
+        root: 'builds/development/',
+        livereload: true
+    })
+})
+
+gulp.task('default', ['coffee','jsConcat', 'compass', 'connect', 'watch']);
